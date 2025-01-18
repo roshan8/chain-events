@@ -1,8 +1,8 @@
 package db
 
 import (
-	"github.com/roshan8/change-events/api"
 	"github.com/roshan8/change-events/config"
+	"github.com/roshan8/change-events/types"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -25,7 +25,7 @@ func InitializeDB() *gorm.DB {
 	// initialize the global store object
 	store = db
 
-	if err = db.Migrator().AutoMigrate(&api.KubernetesEvent{}); err != nil {
+	if err = db.Migrator().AutoMigrate(&types.Event{}); err != nil {
 		log.Fatal().Err(err).Msg("failed to migrate the database")
 	}
 

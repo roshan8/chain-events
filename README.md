@@ -17,3 +17,14 @@
 go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
 oapi-codegen -config oapi-codegen-config.yaml openapi.yaml
 ```
+
+Table name: events
+
+id
+severity info/warning/error/fatal
+title    {associated with reason field in k8}
+message  {associated with message field in k8}
+created_at
+source kubernetes/gcp/atlas/
+tags jsonb  {name, namespace, annotations}
+event_time 
