@@ -10,3 +10,10 @@
 - Are there any open-source tool exist for the above?
 - Why can't we use loki, it supports accepting logs from various places. - May be we can't monitor logs based on some condition later on?
 - Can sentry be used? - It has integration with most of them & their project seems to be open-source as well.
+
+
+### How to develop
+```sh
+go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
+oapi-codegen -config oapi-codegen-config.yaml openapi.yaml
+```

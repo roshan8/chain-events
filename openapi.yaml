@@ -1,0 +1,299 @@
+openapi: 3.0.0
+info:
+  title: Change Events API
+  version: 1.0.0
+  description: API to track and manage change events across different platforms (Kubernetes, Cloud providers, Atlas)
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /events/kubernetes:
+    get:
+      summary: List Kubernetes change events
+      operationId: listKubernetesEvents
+      tags:
+        - kubernetes
+      parameters:
+        - name: namespace
+          in: query
+          schema:
+            type: string
+          description: Filter events by namespace
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [Normal, Warning]
+          description: Filter events by type
+        - name: involvedObject.kind
+          in: query
+          schema:
+            type: string
+          description: Filter events by involved object kind
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KubernetesEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create Kubernetes change event
+      operationId: createKubernetesEvent
+      tags:
+        - kubernetes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KubernetesEvent'
+      responses:
+        '201':
+          description: Event created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KubernetesEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /events/cloud/gcp:
+    get:
+      summary: List GCP change events
+      operationId: listGCPEvents
+      tags:
+        - cloud
+      parameters:
+        - name: project_id
+          in: query
+          schema:
+            type: string
+          description: Filter events by GCP project
+        - name: service
+          in: query
+          schema:
+            type: string
+          description: Filter events by GCP service
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GCPEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create GCP change event
+      operationId: createGCPEvent
+      tags:
+        - cloud
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GCPEvent'
+      responses:
+        '201':
+          description: Event created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GCPEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+
+    KubernetesEvent:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [Normal, Warning]
+        reason:
+          type: string
+          description: String describing the reason for the event
+        message:
+          type: string
+          description: Detailed message about the event
+        metadata:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Event name
+            namespace:
+              type: string
+              description: Namespace where event occurred
+            creationTimestamp:
+              type: string
+              format: date-time
+              description: ISO-8601 timestamp
+            labels:
+              type: object
+              additionalProperties: true
+            annotations:
+              type: object
+              additionalProperties: true
+          required:
+            - name
+            - namespace
+            - creationTimestamp
+        involvedObject:
+          type: object
+          properties:
+            kind:
+              type: string
+              description: Pod|Deployment|Service|etc
+            namespace:
+              type: string
+              description: Object namespace
+            name:
+              type: string
+              description: Object name
+            uid:
+              type: string
+              description: Object UID
+            apiVersion:
+              type: string
+              description: API version
+            resourceVersion:
+              type: string
+              description: Resource version
+            fieldPath:
+              type: string
+              description: Field path (if applicable)
+          required:
+            - kind
+            - namespace
+            - name
+            - uid
+            - apiVersion
+        source:
+          type: object
+          properties:
+            component:
+              type: string
+              description: Component that generated the event
+            host:
+              type: string
+              description: Node where event occurred
+          required:
+            - component
+            - host
+        firstTimestamp:
+          type: string
+          format: date-time
+          description: ISO-8601 timestamp
+        lastTimestamp:
+          type: string
+          format: date-time
+          description: ISO-8601 timestamp
+        count:
+          type: integer
+          minimum: 1
+          description: Number of times this event has occurred
+        eventTime:
+          type: string
+          format: date-time
+          description: ISO-8601 timestamp
+      required:
+        - type
+        - reason
+        - message
+        - metadata
+        - involvedObject
+        - source
+        - firstTimestamp
+        - lastTimestamp
+        - count
+        - eventTime
+
+    GCPEvent:
+      type: object
+      properties:
+        project_id:
+          type: string
+        service:
+          type: string
+        resource_type:
+          type: string
+        resource_name:
+          type: string
+        action:
+          type: string
+          enum: [create, update, delete]
+        timestamp:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          additionalProperties: true
+      required:
+        - project_id
+        - service
+        - resource_type
+        - resource_name
+        - action
+        - timestamp
