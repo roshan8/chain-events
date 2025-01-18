@@ -3,8 +3,8 @@ package handler
 import (
 	"net/http"
 
-	"github.com/roshan8/chain-events/api"
-	"github.com/roshan8/chain-events/internal/service"
+	"github.com/roshan8/change-events/api"
+	"github.com/roshan8/change-events/internal/service"
 )
 
 var _ api.ServerInterface

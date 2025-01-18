@@ -1,4 +1,4 @@
-module github.com/roshan8/chain-events
+module github.com/roshan8/change-events
 
 go 1.22.0
 

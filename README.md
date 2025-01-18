@@ -1,4 +1,4 @@
-## Chain-events
+## Change-events
 
 ### Motivation
 - One place to receive system events from all the places including kubernetes, different cloud provider, and webhook to receive notifications from other users application.

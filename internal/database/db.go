@@ -1,8 +1,8 @@
 package db
 
 import (
-	"github.com/roshan8/chain-events/api"
-	"github.com/roshan8/chain-events/config"
+	"github.com/roshan8/change-events/api"
+	"github.com/roshan8/change-events/config"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

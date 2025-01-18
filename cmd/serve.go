@@ -10,12 +10,12 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/roshan8/chain-events/api"
-	"github.com/roshan8/chain-events/config"
-	db "github.com/roshan8/chain-events/internal/database"
-	"github.com/roshan8/chain-events/internal/handler"
-	"github.com/roshan8/chain-events/internal/repository"
-	"github.com/roshan8/chain-events/internal/service"
+	"github.com/roshan8/change-events/api"
+	"github.com/roshan8/change-events/config"
+	db "github.com/roshan8/change-events/internal/database"
+	"github.com/roshan8/change-events/internal/handler"
+	"github.com/roshan8/change-events/internal/repository"
+	"github.com/roshan8/change-events/internal/service"
 	"github.com/spf13/cobra"
 )
 

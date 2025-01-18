@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/roshan8/chain-events/api"
+	"github.com/roshan8/change-events/api"
 	"gorm.io/gorm"
 )
 
